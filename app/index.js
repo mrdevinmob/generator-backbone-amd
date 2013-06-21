@@ -73,7 +73,11 @@ Generator.prototype.askFor = function(first_argument) {
 };
 
 Generator.prototype.gruntfile = function gruntfile() {
-  this.template('Gruntfile.js');
+  if (this.options.coffee) {
+    this.template('Gruntfile.coffee');
+  }else{
+    this.template('Gruntfile.js');
+  }
 };
 
 Generator.prototype.packageJSON = function packageJSON() {
