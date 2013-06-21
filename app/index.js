@@ -91,7 +91,7 @@ Generator.prototype.git = function git() {
 
 Generator.prototype.bower = function() {
   this.copy('bowerrc', '.bowerrc');
-  this.copy('component.json', 'component.json');
+  this.copy('bower.json', 'bower.json');
 };
 
 Generator.prototype.jshint = function jshint() {
