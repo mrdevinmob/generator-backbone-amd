@@ -81,15 +81,15 @@ module.exports = (grunt) ->
         "<%%= yeoman.app %>/scripts/{,*/}*.js", 
         "!<%%= yeoman.app %>/scripts/vendor/*", 
         "test/spec/{,*/}*.js"]
-
-    buster: <% if (testFramework == 'buster') { %>
+    <% if (testFramework == 'buster') { %>
+    buster: 
       test:
         config: "test/buster.js"
 
       server:
         port: 1111
-
-    mocha: <% } else if(testFramework == 'mocha') {%>
+    <% } else if(testFramework == 'mocha') {%>
+    mocha: 
       all:
         options:
           run: true
