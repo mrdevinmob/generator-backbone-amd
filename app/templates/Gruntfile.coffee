@@ -35,7 +35,11 @@ module.exports = (grunt) ->
         tasks: ["compass"]
 
       livereload:
-        files: ["<%%= yeoman.app %>/*.html", "{.tmp,<%%= yeoman.app %>}/styles/{,*/}*.css", "{.tmp,<%%= yeoman.app %>}/scripts/{,*/}*.js", "<%%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp}"]
+        files: [
+            "<%%= yeoman.app %>/*.html", 
+            "{.tmp,<%%= yeoman.app %>}/styles/{,*/}*.css", 
+            "{.tmp,<%%= yeoman.app %>}/scripts/{,*/}*.js", 
+            "<%%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp}"]
         tasks: ["livereload"]
 
     connect:
@@ -72,22 +76,26 @@ module.exports = (grunt) ->
       options:
         jshintrc: ".jshintrc"
 
-      all: ["Gruntfile.js", "<%%= yeoman.app %>/scripts/{,*/}*.js", "!<%%= yeoman.app %>/scripts/vendor/*", "test/spec/{,*/}*.js"]
+      all: [
+        "Gruntfile.js", 
+        "<%%= yeoman.app %>/scripts/{,*/}*.js", 
+        "!<%%= yeoman.app %>/scripts/vendor/*", 
+        "test/spec/{,*/}*.js"]
 
-    buster: #<% if (testFramework == 'buster') { %>
+    buster: <% if (testFramework == 'buster') { %>
       test:
         config: "test/buster.js"
 
       server:
         port: 1111
 
-    mocha: #<% } else if(testFramework == 'mocha') {%>
+    mocha: <% } else if(testFramework == 'mocha') {%>
       all:
         options:
           run: true
           urls: ["http://localhost:<%%= connect.options.port %>/index.html"]
 
-    #<% } %>
+    <% } %>
     coffee:
       dist:
         files: [
@@ -128,13 +136,11 @@ module.exports = (grunt) ->
     #concat: {
     #            dist: {}
     #        },
-    #<% if (includeRequireJS) { %>
+    <% if (includeRequireJS) { %>
     requirejs:
       dist:
-        
         # Options: https://github.com/jrburke/r.js/blob/master/build/example.build.js
         options:
-          
           # `name` and `out` is set by grunt-usemin
           baseUrl: ".tmp/scripts"
           optimize: "none"
@@ -147,10 +153,8 @@ module.exports = (grunt) ->
           preserveLicenseComments: false
           useStrict: true
           wrap: true
-
-    
-    #uglify2: {} // https://github.com/mishoo/UglifyJS2
-    #<% } %>
+          #uglify2: {} // https://github.com/mishoo/UglifyJS2
+    <% } %>
     useminPrepare:
       html: "<%%= yeoman.app %>/index.html"
       options:
@@ -226,7 +230,7 @@ module.exports = (grunt) ->
           src: ["components/requirejs/require.js", "components/jquery/jquery.js", "components/underscore/underscore.js", "components/backbone/backbone.js", "scripts/{,*/}*.js"]
         ]
 
-    #<% if (includeRequireJS) { %>
+    <% if (includeRequireJS) { %>
     bower:
       options:
         exclude: ["modernizr"]
@@ -234,14 +238,46 @@ module.exports = (grunt) ->
       all:
         rjsConfig: "<%%= yeoman.app %>/scripts/main.js"
 
-  #<% } %>
+  <% } %>
   grunt.renameTask "regarde", "watch"
   grunt.registerTask "server", (target) ->
     return grunt.task.run(["build", "open", "connect:dist:keepalive"])  if target is "dist"
-    grunt.task.run ["clean:server", "coffee:dist", "compass:server", "livereload-start", "connect:livereload", "open", "watch"]
 
-  grunt.registerTask "test", ["clean:server", "coffee", "compass", "connect:test", "mocha"]
-  #<% if (includeRequireJS) { %>
-  #<% } %>
-  grunt.registerTask "build", ["clean:dist", "coffee", "compass:dist", "useminPrepare", "copy:prepareRequirejs", "requirejs", "imagemin", "svgmin", "htmlmin", "concat", "cssmin", "uglify", "copy", "usemin"]
-  grunt.registerTask "default", ["jshint", "test", "build"]
+    grunt.task.run [
+        "clean:server", 
+        "coffee:dist", 
+        "compass:server", 
+        "livereload-start", 
+        "connect:livereload", 
+        "open", 
+        "watch"]
+
+  grunt.registerTask "test", [
+    "clean:server", 
+    "coffee", 
+    "compass", 
+    "connect:test", 
+    "mocha"]
+
+  <% if (includeRequireJS) { %>
+  <% } %>
+  grunt.registerTask "build", [
+    "clean:dist", 
+    "coffee", 
+    "compass:dist", 
+    "useminPrepare",<% if (includeRequireJS) { %>
+    'copy:prepareRequirejs',
+    'requirejs',<% } %> 
+    "imagemin", 
+    "svgmin", 
+    "htmlmin", 
+    "concat", 
+    "cssmin", 
+    "uglify", 
+    "copy", 
+    "usemin"]
+
+  grunt.registerTask "default", [
+    "jshint", 
+    "test", 
+    "build"]
